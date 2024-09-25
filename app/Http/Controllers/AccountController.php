@@ -227,6 +227,7 @@ public function saveJob(Request $request)
     $job->title = $request->title;
     $job->category_id = $request->category_id; // Ensure you use the correct key
     $job->job_type_id = $request->job_type_id; // Ensure you use the correct key
+    $job->user_id = Auth::user()->id;
     $job->vacancy = $request->vacancy;
     $job->salary = $request->salary;
     $job->location = $request->location;
@@ -254,7 +255,12 @@ public function saveJob(Request $request)
 
 public function myJobs()
 {
-    return view('front.account.job.my-jobs');
+
+    $jobs = Job::where('user_id', Auth::user()->id)->with('jobType')->paginate(10);
+    return view('front.account.job.my-jobs',[
+        'jobs' => $jobs,
+
+    ]);
 }
 
 }

@@ -27,7 +27,7 @@ class CreateJobsTable extends Migration
             $table->text('benefits')->nullable(); // Benefits (Optional)
             $table->text('responsibility')->nullable(); // Responsibilities (Optional)
             $table->text('qualifications')->nullable(); // Qualifications (Optional)
-            $table->string('keywords'); // Keywords
+            $table->string('keywords')->nullable();
             $table->string('experience'); // Experience
 
             // Company Details

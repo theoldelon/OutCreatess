@@ -25,7 +25,7 @@
     <!-- Account Menu Links -->
     <ul class="bg-white">
         <li>
-            <a href="" class="flex items-center justify-between w-full p-2 text-gray-700 hover:bg-blue-200 rounded transition duration-200 no-underline">
+            <a href="{{ route('account.profile') }}" class="flex items-center justify-between w-full p-2 text-gray-700 hover:bg-blue-200 rounded transition duration-200 no-underline">
                 <div class="flex items-center">
                     <i class="fas fa-cog w-4 h-4 mr-2 text-blue-500"></i>
                     <span class="text-sm">Account Settings</span>
@@ -33,7 +33,7 @@
             </a>
         </li>
         <li>
-            <a href="post-job.html" class="flex items-center justify-between w-full p-2 text-gray-700 hover:bg-blue-200 rounded transition duration-200 no-underline">
+            <a href="{{ route('account.createJob') }}" class="flex items-center justify-between w-full p-2 text-gray-700 hover:bg-blue-200 rounded transition duration-200 no-underline">
                 <div class="flex items-center">
                     <i class="fas fa-plus-circle w-4 h-4 mr-2 text-blue-500"></i>
                     <span class="text-sm">Post a Job</span>
@@ -64,13 +64,6 @@
                 </div>
             </a>
         </li>
-        <li>
-            <a href="{{ route('account.logout') }}" class="flex items-center justify-between w-full p-2 text-red-600 hover:bg-red-200 rounded transition duration-200 no-underline">
-                <div class="flex items-center">
-                    <i class="fas fa-sign-out-alt w-4 h-4 mr-2 text-red-500"></i>
-                    <span class="text-sm">Log Out</span>
-                </div>
-            </a>
-        </li>
+
     </ul>
 </div>
