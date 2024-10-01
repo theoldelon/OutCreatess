@@ -34,6 +34,7 @@
                             <div class="mb-4">
                                 <label for="hourly_rate" class="block mb-2 font-medium">Hourly Rate*</label>
                                 <input type="text" id="hourly_rate" name="hourly_rate" placeholder="Hourly Rate" class="form-control border rounded-lg shadow-sm" value="{{ old('hourly_rate', $user->hourly_rate) }}">
+                            <p></p>
                             </div>
                             <div class="mb-4">
                                 <label for="availability" class="block mb-2 font-medium">Availability*</label>

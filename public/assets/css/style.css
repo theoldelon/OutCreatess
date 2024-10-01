@@ -9295,38 +9295,6 @@ figure, pre, table {
 img {
   width: 100%;
 }
-h1, h2, h3, h4, h5, h6 {
-  margin: 0;
-  line-height: 1.2;
-  padding: 0px 0 20px;
-  font-family: 'Inter-Bold';
-}
-h1 span, h2 span, h3 span, h4 span, h5 span, h6 span {
-  font-size: inherit;
-  font-family: inherit;
-  display: inline-block;
-  color: #A8DF8E;
-}
-h1 {
-  font-size: 66px;
-}
-h1 span {
-  color: #A8DF8E;
-}
-h2 {
-  font-size: 30px;
-  position: relative;
-  color: #414042;
-}
-h2:after {
-  content: "";
-  position: absolute;
-  background-color: #A8DF8E;
-  width: 70px;
-  height: 4px;
-  bottom: 0px;
-  left: 0px;
-}
 h3 {
   font-size: 36px;
 }

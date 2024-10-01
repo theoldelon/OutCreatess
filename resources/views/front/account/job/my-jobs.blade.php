@@ -8,7 +8,18 @@
                 @include('front.account.sidebar')
             </div>
 
+
             <div class="col-lg-9">
+                
+            @if (session('success'))
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+                <strong class="font-bold">Success!</strong>
+                <span class="block sm:inline">{{ session('success') }}</span>
+                <span class="absolute top-0 bottom-0 right-0 px-4 py-3 cursor-pointer" onclick="this.parentElement.style.display='none'">
+                    <i class="material-icons">close</i>
+                </span>
+            </div>
+        @endif
                 <div class="card border-0 shadow mb-4 p-3">
                     <div class="card-body card-form">
                         <div class="d-flex justify-content-between align-items-center">
@@ -44,22 +55,29 @@
                                         </td>
                                         <td>
                                             <div class="action-dots float-end">
-                                                <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <button type="button" class="btn" data-bs-toggle="dropdown" aria-expanded="false">
                                                     <i class="material-icons">more_vert</i>
-                                                </a>
+                                                </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li><a class="dropdown-item" href="job-detail.html">
-                                                        <i class="material-icons">visibility</i> View
-                                                    </a></li>
-                                                    <li><a class="dropdown-item" href="#">
-                                                        <i class="material-icons">edit</i> Edit
-                                                    </a></li>
-                                                    <li><a class="dropdown-item" href="#">
-                                                        <i class="material-icons">delete</i> Remove
-                                                    </a></li>
+                                                    <li>
+                                                        <a class="dropdown-item" href="job-detail.html">
+                                                            <i class="material-icons">visibility</i> View
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item" href="{{ route('account.editJobs', $job->id) }}">
+                                                            <i class="material-icons">edit</i> Edit
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item text-danger" href="#" onclick="deleteJob({{ $job->id }})">
+                                                            <i class="material-icons">delete</i> Remove
+                                                        </a>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </td>
+                                        
                                     </tr>
                                     @endforeach
                                     @else
@@ -83,4 +101,24 @@
 @endsection
 
 @section('customJs')
+<script>
+
+function deleteJob(jobId)
+{
+    if(confirm("Sure wan`t to delete job?"))
+    {
+        $.ajax({
+            type: "POST",
+            url: "{{ route('account.deleteJob') }}",
+            data: {jobId: jobId},
+            dataType: 'json',
+            success: function(response)
+            {
+                window.location.href='{{ route("account.myJobs") }}';
+            }
+        
+        });
+    }
+}
+</script>
 @endsection
