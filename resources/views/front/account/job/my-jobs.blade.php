@@ -30,7 +30,7 @@
                                 <thead class="bg-light">
                                     <tr>
                                         <th scope="col">Title</th>
-                                        <th scope="col">Job Created</th>
+                                        <th scope="col">Created</th>
                                         <th scope="col">Applicants</th>
                                         <th scope="col">Status</th>
                                         <th scope="col">Action</th>
@@ -60,7 +60,7 @@
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
                                                     <li>
-                                                        <a class="dropdown-item" href="job-detail.html">
+                                                        <a class="dropdown-item" href="{{ route('jobDetail', $job->id) }}">
                                                             <i class="material-icons">visibility</i> View
                                                         </a>
                                                     </li>

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Job;
+use App\Models\JobApplication;
 use App\Models\JobType;
+use App\Models\SavedJob;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -195,22 +197,23 @@ public function createJob()
 public function saveJob(Request $request)
 {
     $rules = [
-        'title' => 'required|string|max:255',
-        'category_id' => 'required|integer',
-        'job_type_id' => 'required|integer',
-        'vacancy' => 'required|integer|min:1',
-        'salary' => 'required|numeric',
-        'location' => 'required|string|max:255',
-        'description' => 'required|string',
-        'benefits' => 'nullable|string',
-        'responsibility' => 'nullable|string',
-        'qualifications' => 'nullable|string',
-        'keywords' => 'nullable|string',
-        'experience' => 'nullable|integer|min:0',
-        'company_name' => 'required|string|max:255',
-        'company_location' => 'required|string|max:255',
-        'company_website' => 'nullable|url',
+        'title' => 'bail|required|string|max:255',
+        'category_id' => 'bail|required|integer|exists:categories,id',
+        'job_type_id' => 'bail|required|integer|exists:job_types,id',
+        'vacancy' => 'bail|required|integer|min:1',
+        'salary' => 'bail|required|numeric|min:0|max:1000000',
+        'location' => 'bail|required|string|max:255',
+        'description' => 'bail|required|string|min:20',   
+        'benefits' => 'nullable|string|max:1000',
+        'responsibility' => 'nullable|string|max:2000', 
+        'qualifications' => 'nullable|string|max:2000',
+        'keywords' => 'nullable|string|max:500',
+        'experience' => 'nullable|integer|min:0|max:50',
+        'company_name' => 'bail|required|string|max:255',
+        'company_location' => 'bail|required|string|max:255',
+        'company_website' => 'nullable|url|regex:/^https?:\/\/[^\s$.?#].[^\s]*$/i',
     ];
+    
 
     $validator = Validator::make($request->all(), $rules);
 
@@ -353,20 +356,130 @@ public function deleteJob(Request $request)
         'id' => $request->jobId,
     ])->first();
 
-    if($job == null){
-        session()->flash('error', 'Job not found!');
+    // Check if the job exists
+    if ($job == null) {
         return response()->json([
-            'status' => true,
-        ]);
+            'status' => false,
+            'message' => 'Job not found!'
+        ], 404); // Return a 404 Not Found response
     }
 
-    Job::where('id' ,$request->jobId)->delete();
-    session()->flash('success', 'Job deleted!');
+    // Delete the job
+    $job->delete(); // This is more concise than using where and then delete
     return response()->json([
         'status' => true,
+        'message' => 'Job deleted successfully!'
     ]);
+}
+
+public function myJobApplications()
+{
+    $jobApplications = JobApplication::where('user_id', Auth::user()->id)     
+                    ->with(['job', 'job.jobType', 'job.applications'])
+                    ->paginate(8);
+
+    return view('front.account.job.my-job-applications', [
+        'jobApplications' => $jobApplications,
+    ]);
+}
+
+public function removeJobs(Request $request)
+{
+    $jobApplications = JobApplication::where([
+                        'id' => $request->id,
+                        'user_id' => Auth::user()->id])->first();
+
+    if ($jobApplications == null)
+    {            
+        session()->flash('error', 'Job application not found!');
+        return response()->json([
+
+            'status' => false,
+        ]);
+    }
+    
+    JobApplication::find($request->id)->delete();
+    session()->flash('success', 'Job application removed!');
+    return response()->json([
+        'status' => true,
+        ]);
 
 }
 
+public function savedJobs()
+{
+    // Fetch saved jobs for the authenticated user
+    $savedJobs = SavedJob::where('user_id', Auth::id()) // Auth::id() gives the ID of the currently logged-in user
+                        ->with(['job', 'job.jobType', 'job.applications'])
+                        ->orderBy('created_at', 'DESC') 
+                        ->paginate(8); // Add pagination if necessary
+
+    // Return the saved jobs view and pass the $savedJobs variable
+    return view('front.account.job.saved-job', [
+        'savedJobs' => $savedJobs, // Make sure to use the correct variable name here
+    ]);
+}
+
+public function removeSavedJobs(Request $request)
+{
+    // Find the saved job by id and user_id
+    $savedJob = SavedJob::where([
+                        'id' => $request->id,
+                        'user_id' => Auth::user()->id])->first();
+
+    // If the saved job is not found
+    if ($savedJob == null)
+    {            
+        session()->flash('error', 'Job not found!');
+        return response()->json([
+            'status' => false,
+        ]);
+    }
+    
+    // Delete the saved job
+    $savedJob->delete();
+
+    // Set success message and return response
+    session()->flash('success', 'Job unsaved successfully!');
+    return response()->json([
+        'status' => true,
+    ]);
+}
+
+public function updatePassword(Request $request) {
+    $validator = Validator::make($request->all(), [
+        'old_password' => 'required',
+        'new_password' => 'required|min:5',
+        'confirm_password' => 'required|same:new_password',
+    ]);
+
+    // Check if validation fails
+    if ($validator->fails()) {
+        return response()->json([
+            'status' => false,
+            'errors' => $validator->errors(),
+        ]);
+    }
+
+    // Check if the old password is correct
+    if (!Hash::check($request->old_password, Auth::user()->password)) {
+        return response()->json([
+            'status' => false,
+            'errors' => ['old_password' => 'Your old password is incorrect.'],
+        ]);
+    }
+
+    // Update password if validation and old password are correct
+    $user = User::find(Auth::user()->id);
+    $user->password = Hash::make($request->new_password);
+    $user->save();
+
+    // Flash success message and return JSON response
+    session()->flash('success', 'Password updated successfully.');
+    return response()->json([
+        'status' => true,
+        'message' => 'Password updated successfully.',
+    ]);
+}
 
 }

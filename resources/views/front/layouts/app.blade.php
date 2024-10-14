@@ -7,14 +7,22 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1, user-scalable=no" />
 	<meta name="HandheldFriendly" content="True" />
 	<meta name="pinterest" content="nopin" />
+    
+	<!-- Tailwind CSS -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
+
+	<!-- Font Awesome -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+	<!-- Material Icons -->
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Local CSS -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css') }}" />
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-	<link rel="shortcut icon" type="image/x-icon" href="#" />
+	
 	<!-- Bootstrap CSS -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -22,9 +30,16 @@
 	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 
+	<!-- Bootstrap JS and Popper.js -->
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/ui/trumbowyg.min.css" integrity="sha512-Fm8kRNVGCBZn0sPmwJbVXlqfJmPC13zRsMElZenX6v721g/H7OukJd8XzDEBRQ2FSATK8xNF9UYvzsCtUpfeJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+	<!-- CSRF Token -->
 	<meta name="csrf-token" content="{{ csrf_token() }}">
-	
 </head>
+
 <body data-instant-intensity="mousedown">
 <header>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light shadow py-3">
@@ -113,7 +128,8 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				<form id="profilePicForm" name="profilePicForm" action="" method="POST" enctype="multipart/form-data">
+				<form id="profilePicForm" name="profilePicForm" action="{{ route('account.updateProfilePic') }}" method="POST" enctype="multipart/form-data">
+
 					@csrf <!-- Include CSRF token -->
 					<div class="mb-3">
 						<label for="image" class="form-label">Profile Image</label>
@@ -218,10 +234,16 @@
 <script src="{{ asset('assets/js/instantpages.5.1.0.min.js') }}"></script>
 <script src="{{ asset('assets/js/lazyload.17.6.0.min.js') }}"></script>
 <script src="{{ asset('assets/js/custom.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/trumbowyg.min.js" integrity="sha512-YJgZG+6o3xSc0k5wv774GS+W1gx0vuSI/kr0E0UylL/Qg/noNspPtYwHPN9q6n59CTR/uhgXfjDXLTRI+uIryg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 @yield('customJs')
 
 <script>
+	$('.textarea').trumbowyg();
+	$(document).ready(function() {
+        // Initialize Trumbowyg for the desired textareas
+        $('#description, #benefits, #responsibility, #qualifications').trumbowyg();
+    });
     // Set up CSRF token for AJAX requests
     $.ajaxSetup({
         headers: {
@@ -251,13 +273,20 @@
                         $('#imageError').text(errors.image[0]); // Display image validation error
                     }
                 } else {
-					window.location.href = '{{ url()->current() }}';
+                    // Optionally display a success message
+                    alert('Profile picture updated successfully!');
+
+                    // Optionally reset the form
+                    $('#profilePicForm')[0].reset();
+
+                    // Reload the current page to reflect changes
+                    window.location.href = '{{ url()->current() }}';
                 }
             },
             error: function(xhr, status, error) {
                 // Handle AJAX error response
-                console.log('Error:', error);
-                alert('An error occurred while updating the profile picture.');
+                console.error('Error:', error);
+                alert('An error occurred while updating the profile picture. Please try again later.');
             }
         });
     });

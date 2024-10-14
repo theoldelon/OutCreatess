@@ -18,4 +18,10 @@ class Job extends Model
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
+
+    // Define the relationship with JobApplication
+    public function applications()
+    {
+        return $this->hasMany(JobApplication::class, 'job_id');
+    }
 }

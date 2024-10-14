@@ -49,7 +49,7 @@
             </a>
         </li>
         <li>
-            <a href="saved-jobs.html" class="flex items-center justify-between w-full p-2 text-gray-700 hover:bg-blue-200 rounded transition duration-200 no-underline">
+            <a href="{{ route('account.savedJobs') }}" class="flex items-center justify-between w-full p-2 text-gray-700 hover:bg-blue-200 rounded transition duration-200 no-underline">
                 <div class="flex items-center">
                     <i class="fas fa-heart w-4 h-4 mr-2 text-blue-500"></i>
                     <span class="text-sm">Saved Jobs</span>
@@ -57,7 +57,7 @@
             </a>
         </li>
         <li>
-            <a href="" class="flex items-center justify-between w-full p-2 text-gray-700 hover:bg-blue-200 rounded transition duration-200 no-underline">
+            <a href="{{ route('account.myJobApplications') }}" class="flex items-center justify-between w-full p-2 text-gray-700 hover:bg-blue-200 rounded transition duration-200 no-underline">
                 <div class="flex items-center">
                     <i class="fas fa-file-alt w-4 h-4 mr-2 text-blue-500"></i>
                     <span class="text-sm">Jobs Applied</span>

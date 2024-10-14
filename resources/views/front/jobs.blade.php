@@ -5,17 +5,18 @@
     <div class="container">
         <div class="row">
             <div class="col-6 col-md-10">
-                <h2 class="text-primary">Find Jobs</h2>
+                <h2 class="text-blue-600">Find Jobs</h2> <!-- Tailwind class for primary color -->
             </div>
             <div class="col-6 col-md-2">
-                <div class="align-end">
-                    <select name="sort" id="sort" class="form-control" onchange="redirectToSort()">
+                <div class="w-full flex justify-end"> <!-- Flexbox for alignment -->
+                    <select name="sort" id="sort" class="w-full sm:w-auto border border-gray-300 rounded-lg p-2 shadow-sm focus:ring focus:ring-blue-200" onchange="redirectToSort()">
                         <option value="1" {{ (Request::get('sort') == '1' ? 'selected' : '') }}>Latest</option>
                         <option value="0" {{ (Request::get('sort') == '0' ? 'selected' : '') }}>Oldest</option>
                     </select>
                 </div>
             </div>
         </div>
+        
 
         <div class="row pt-5">
             <div class="col-md-4 col-lg-3 sidebar mb-4">
@@ -23,7 +24,7 @@
                     <div class="card border-0 shadow-lg p-4 rounded-3 bg-white">
                         <!-- Keywords Section -->
                         <div class="mb-4">
-                            <h2 class="h5 text-primary mb-2">Keywords</h2>
+                            <h2 class="h5 text-primary mb-2">Job Title</h2>
                             <input type="text" name="keyword" id="keyword" placeholder="Enter job title or keywords" class="form-control border-0 shadow-sm p-3 rounded-2" value="{{ Request::get('keyword') }}">
                         </div>
 
@@ -35,8 +36,8 @@
 
                         <!-- Category Section -->
                         <div class="mb-4">
-                            <h2 class="h5 text-primary mb-2">Category</h2>
-                            <select name="category" id="category" class="form-control border-0 shadow-sm p-3 rounded-2" style="height: 50px;>
+                            <h2 class="h5 text-primary mb-12">Category</h2>
+                            <select name="category" id="category" class="w-full h-16 border border-gray-300 shadow-sm p-3 rounded-lg focus:ring focus:ring-blue-200">
                                 <option value="">Select a Category</option>
                                 @if ($categories)
                                     @foreach ($categories as $category)
@@ -47,6 +48,7 @@
                                 @endif
                             </select>
                         </div>
+                        
 
                         <!-- Job Type Section -->
                         <div class="mb-4">
@@ -99,8 +101,7 @@
                                         <div class="card border-0 p-3 shadow mb-4" style="min-height: 350px;">
                                             <div class="card-body">
                                                 <h3 class="border-0 fs-5 pb-2 mb-0">{{ $job->title }}</h3>
-                                                <p>{{ Str::words($job->description, 15, '...') }}</p> <!-- Increased words for better context -->
-
+                                                <p>{{ Str::words(strip_tags($job->description), 15, '...') }}</p>
                                                 <div class="bg-light p-3 border">
                                                     <p class="mb-0">
                                                         <span class="fw-bolder"><i class="fa fa-map-marker"></i></span>

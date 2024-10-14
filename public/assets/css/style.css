@@ -10104,5 +10104,39 @@ footer .nav-link {
 .icon-handshake:before {
   content: '';
 }
+
+.saved-job a{
+  background-color: #00D362 !important; /* Green background */
+  color: gainsboro !important; /* Light grey text color */
+}
+
+.card ul li{
+  list-style: disc;
+}
+.ql-toolbar {
+  background-color: #f3f4f6; /* Light gray (tailwind: bg-gray-100) */
+  border: 1px solid #cbd5e1; /* Gray border */
+}
+
+/* Change the editor background color */
+.ql-editor {
+  background-color: #ffffff; /* White (tailwind: bg-white) */
+  color: #000000; /* Black text (tailwind: text-black) */
+}
+
+/* Change button colors in the toolbar */
+.ql-toolbar button {
+  color: #4a90e2; /* Blue color (tailwind: text-blue-500) */
+}
+
+.ql-toolbar button:hover {
+  background-color: #e2e8f0; /* Light gray hover effect */
+}
+
+/* Customize the Quill icons */
+.ql-toolbar .ql-active {
+  color: #4a90e2; /* Change active button color */
+}
+
 /* '' */
 
